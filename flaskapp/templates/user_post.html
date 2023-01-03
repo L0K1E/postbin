@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% block content %}
+<h2 class="mb-2" style="color: rgb(53, 53, 53)">
+    <i class="fas fa-user pr-1" style="color: rgb(53, 53, 53)"></i>
+    {{ user.username }}'s posts</h2>
+<small class="text-muted pl-2">Results found : {{ posts.total }}</small>
+<div class="pt-4"></div>
+  {%for post in posts.items %}
+  <div class="card border-light" style="max-width: 48rem;">
+    <div class="card-header">
+      <img
+        class="rounded-circle"
+        style="width: 25px;height: 25px;vertical-align: middle;"
+        src="{{ url_for('static', filename='profiles/' + post.author.image) }}"
+      />
+      <a class="mr-3">@{{ post.author.username }}</a>
+      <small class="text-muted text-right">
+        <i class="fas fa-calendar-alt pr-1" style="color: #11101c"></i>
+        {{ post.date_posted.strftime("%d-%m-%Y") }}
+      </small>
+      <small class="text-muted pl-2">
+          <i class="fas fa-clock pr-1" style="color: #11101c"></i>
+          {{ post.date_posted.strftime("%H:%M %p") }}(UTC)
+        </small>
+    </div>
+    <div class="card-body" style="background-color: #e8e8e8;">
+      <h3>
+        <a
+        href="{{ url_for('posts.post', post_id=post.id) }}" 
+        style="color: #444444;text-decoration: none;font-size: 25px">
+        {{
+          post.title
+        }}
+      </a>
+      </h3>
+      <a
+        href="{{ url_for('posts.post', post_id=post.id) }}">
+      <small class="text-muted">Read more...</a>
+          <small class="text-muted text-right">
+              <i class="fas fa-clock pr-1" style="color: #11101c"></i>
+              {{ post.date_posted.strftime("%H:%M %p") }}(UTC)
+            </small>
+      </small>
+    </div>
+    {% if post.author == current_user %}
+    <div class="card-footer text-right">
+      <a
+        class="fas fa-edit pr-1"
+        style="color: #11101c"
+        href="{{ url_for('posts.update_post', post_id=post.id) }}"
+      ></a>
+      <a
+        class="fas fa-trash-alt pr-1"
+        style="color: #ff3a3a"
+        href="{{ url_for('posts.delete_post', post_id=post.id) }}"
+      ></a>
+    </div>
+    {% endif %}
+  </div>
+  <br />
+  {% endfor %}
+  {%for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+      {% if posts.page == page_num %}
+        <a class="btn btn-info mb-4" href="{{ url_for('users.user_post', username=user.username, page=page_num) }}">
+          {{page_num}}</a>
+       {% else %}
+       <a class="btn btn-outline-info mb-4" href="{{ url_for('main.index', username=user.username, page=page_num) }}">
+          {{page_num}}</a>
+        {% endif%}
+    {% else %}
+    ...
+    {% endif%}
+  {% endfor %}
+  {% endblock content %}
+</form>

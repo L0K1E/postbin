@@ -1,0 +1,66 @@
+{% extends 'base.html' %}{% block content %}
+<div
+  style="background: #ffffff;padding: 10px 20px;border: 1px solid #dddddd;border-radius: 3px;margin-bottom: 20px;"
+>
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+      <legend class="mb-4">
+        <i class="fas fa-user-alt pr-1" style="color: #11101c"></i>
+        Log In
+      </legend>
+      <div class="form-group">
+        <i class="fas fa-envelope pr-1" style="color: #11101c"></i>
+        {{ form.email.label(class='form-control-label') }}
+        {% if form.email.errors%}
+        {{form.email(class='form-control is-invalid')}}
+        <div class="invalid-feedback">
+          {% for error in form.email.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %}
+        {{ form.email(class='form-control') }}
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <i class="fas fa-key pr-1" style="color: #11101c"></i>
+        {{ form.password.label(class='form-control-label') }}
+        {% if form.password.errors%}
+        {{form.password(class='form-control is-invalid')}}
+        <div class="invalid-feedback">
+          {% for error in form.password.errors %}
+          <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+        {% else %}
+        {{ form.password(class='form-control') }}
+        {% endif %}
+      </div>
+    </fieldset>
+    <div class="form-check">
+      {{form.remember(class='form-check-input')}}
+      {{form.remember.label(class='form-check-label')}}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class='btn btn-outline-primary btn-block btn-sm') }}
+      <small class="text-muted ml-2">
+        <a href="{{ url_for('users.reset_request') }}">Forgot password ?</a>
+      </small>
+    </div>
+  </form>
+</div>
+<small class="text-muted ml-2"
+  ><a href="{{ url_for('users.reset_request') }}">Forgot password ?</a></small
+>
+<div class="border-top pt-3">
+  <small class="text-muted">
+    Do You Need An Account ?
+    <a class="ml-2" href="{{ url_for('users.register') }}">
+      <span class="fas fa-user-plus pr-1" style="color: #11101c"></span>
+      Register Now !</a
+    >
+  </small>
+  <br />
+</div>
+{%endblock content%}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Home</li>
+  </ol>
+</nav>
+<!-- jambotron starts -->
+{% if current_user.is_authenticated %} {% else %}
+<div class="jumbotron">
+  <h1 class="display-4">Welcome!</h1>
+  <p class="lead">
+    What is <b>POSTBIN</b> ?, it's just a content sharing site between your
+    friends. Became one of our author and share your content to others.
+  </p>
+  <hr class="my-4" />
+  <p>
+    Don't you have an account yet, click the button below to register now !
+  </p>
+  <p class="lead">
+    <a
+      class="btn btn-outline-primary btn-lg"
+      href="{{ url_for('users.register') }}"
+      role="button"
+      >Register Now !</a
+    >
+  </p>
+</div>
+{% endif%}
+<!-- jambotron ends -->
+
+<!-- API checker starts -->
+{% if posts_in['status'] and posts_all['status'] != "ok"%}
+<h6 class="text-muted">API Error</h6>
+{% endif%}
+<!-- API checker ends -->
+<!-- International News top-headlines starts-->
+<h5 class="font-weight-bold">
+  <i class="fab fa-gripfire pr-1" style="color: #e84118;"></i>
+  International News
+  <span class="badge badge-pill badge-primary">Today</span>
+</h5>
+<h6 class="ml-4">
+  <i class="fas fa-calendar-alt pr-1" style="color: #212529;"></i>
+  {{ today_date }}
+</h6>
+<br />
+<!--International News top-headlines ends-->
+<!-- carousel starts -->
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <!-- carousel active -->
+    <div class="carousel-item active"></div>
+    {% for dict_item in posts_all["articles"]%}
+    <div class="carousel-item">
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-paper-plane pr-1" style="color: #e84118;"></i>
+          <a
+            class="mr-3"
+            style="text-decoration: none;"
+            href="{{ dict_item['url'] }}"
+            >@ {{ dict_item["source"]["name"] }}
+          </a>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ dict_item["title"] }}</h5>
+          <p class="card-text">{{ dict_item["description"] }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<br />
+<!-- carousel ends -->
+<!-- top-headlines starts-->
+<h5 class="font-weight-bold">
+  <i class="far fa-newspaper pr-1" style="color: #e84118;"></i>
+  Top Headlines :
+  <span class="badge badge-pill badge-primary">Now</span>
+</h5>
+<h6 class="ml-4">
+  <i class="fas fa-map-marker-alt pr-1" style="color: #212529;"></i>
+  India
+</h6>
+<br />
+<!-- top-headlines ends-->
+<!-- post loop starts -->
+{% for dict_item in posts_in["articles"]%}
+<div class="card-header">
+  <i class="fas fa-paper-plane pr-1" style="color: #e84118;"></i>
+  <a class="mr-3" style="text-decoration: none;" href="{{ dict_item['url'] }}"
+    >@ {{ dict_item["source"]["name"] }}
+  </a>
+  <small class="text-muted">
+    {{ dict_item["publishedAt"] }}
+  </small>
+</div>
+<div class="card-body" style="background-color: #e8e8e8; padding: 15px;">
+  {% if dict_item['urlToImage'] != ""%}
+  <img class="card-img-top" src="{{ dict_item['urlToImage'] }}" alt="" />
+  {% endif %} {% if dict_item['author']%}
+  <small>{{ dict_item["author"] }} </small>
+  {% endif %}
+  <h4>
+    <a
+      href="#"
+      style="color: #444444;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;"
+    >
+      {{ dict_item["title"] }}
+    </a>
+  </h4>
+  <a
+    data-toggle="collapse"
+    href="#collapseExample"
+    role="button"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+    style="text-decoration: none;"
+  >
+    {% if dict_item["description"] %}
+    <span class="badge badge-pill badge-primary">
+      <i class="fas fa-ellipsis-h pr-1" style="color: #ffffff;"></i
+    ></span>
+  </a>
+  <div class="collapse" id="collapseExample">
+    <p class="lead text-muted">
+      {{ dict_item["description"] }}
+    </p>
+  </div>
+  {% endif %}
+</div>
+<br />
+<!-- post loop stop -->
+{% endfor %}{% endblock content %}

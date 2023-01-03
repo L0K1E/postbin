@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <img
+      class="rounded-circle"
+      style="width: 25px;height: 25px;vertical-align: middle;"
+      src="{{ url_for('static', filename='profiles/' + post.author.image) }}"
+    />
+    <a
+      class="mr-3"
+      href="{{url_for('users.user_post', username=post.author.username)}}"
+      >@{{ post.author.username }}</a
+    >
+    <small class="text-muted text-right">
+      <i class="fas fa-calendar-alt pr-1" style="color: #11101c"></i>
+      {{ post.date_posted.strftime("%d-%m-%Y") }}
+    </small>
+  </div>
+  <div class="card-body" style="background-color: #ececec;">
+    <div style="color: #444444;text-decoration: none;font-size: 25px">
+      <b>{{ post.title }}</b>
+    </div>
+    <br /><br />
+    <p>{{ post.content | safe }}</p>
+  </div>
+  {% if post.author == current_user %}
+  <div class="card-footer text-right">
+    <a
+      class="fas fa-edit pr-1"
+      style="color: #11101c"
+      href="{{ url_for('posts.update_post', post_id=post.id) }}"
+    ></a>
+    <a
+      class="fas fa-trash-alt pr-1"
+      style="color: #ff3a3a"
+      href="{{ url_for('posts.delete_post', post_id=post.id) }}"
+    ></a>
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}
